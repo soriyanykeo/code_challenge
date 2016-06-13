@@ -8,25 +8,17 @@
 
 import Foundation
 class PhotoDownLoaded: NSObject {
-//    var activeDownloads = [String: Photos]()
     var photo: Photos
     var downloadsSession: NSURLSession
-    
     var isDownloading = false
-    var progress: Float = 0.0
-    
     var downloadTask: NSURLSessionDownloadTask?
-    var resumeData: NSData?
+    var progress: Float = 0.0
     
     init(photo: Photos,downloadsSession:NSURLSession) {
         self.photo = photo
         self.downloadsSession = downloadsSession
     }
-    func savePhoto(completionHandler: (success : Bool)->Void){
-        startDownload()
-    }
-    // Called when the Download button for a track is tapped
-    func startDownload() {
+    func savePhoto(){
         if let urlString = self.photo.url, url =  NSURL(string: urlString) {
             downloadTask = self.downloadsSession.downloadTaskWithURL(url)
             downloadTask!.resume()

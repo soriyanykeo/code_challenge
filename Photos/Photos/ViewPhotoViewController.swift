@@ -14,17 +14,29 @@ class ViewPhotoViewController: UIViewController,UICollectionViewDelegate,UIColle
     var data:NSArray = [Albums]()
     
     @IBOutlet weak var photoCollection: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("album list:\(album)")
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            self.data = self.album.photoList
-            dispatch_async(dispatch_get_main_queue()) {
-                self.photoCollection.reloadData()
+        self.title = String(self.album.albumID!)
+        
+        if self.album.photoList.count > 0 {
+            activityIndicator.startAnimating()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                self.data = self.album.photoList
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.photoCollection.reloadData()
+                    self.activityIndicator.stopAnimating()
+                }
             }
         }
-
+        else{
+            let alert = UIAlertController(title: "PHOTO ALBUM", message: "There is no photo in album.", preferredStyle: UIAlertControllerStyle.Alert)
+            // add an action (button)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            // show the alert
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -37,18 +49,13 @@ class ViewPhotoViewController: UIViewController,UICollectionViewDelegate,UIColle
         let identifier:String = "cell"
         let cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath)
         let imageView:UIImageView = cell.viewWithTag(100) as! UIImageView
-//        let albumLabel:UILabel = cell.viewWithTag(101) as! UILabel
         if data.count > 0 {
             let photo:Photos = data.objectAtIndex(indexPath.row) as! Photos
-                photo.loadThumbnailUrl({ (image) in
+            photo.loadThumbnailUrl({ (success, image) in
+                if success == true{
                     imageView.image = image
-                })
-            
-//            let albumID:String = String(album.albumID!)
-//            let photoCounted:String = String(album.photoList.count)
-//            let albumString:String = "ALBUM " + albumID + " (" +  photoCounted + ")"
-//            albumLabel.text = albumString
-            
+                }
+            })
         }
         return cell;
     }
@@ -59,5 +66,5 @@ class ViewPhotoViewController: UIViewController,UICollectionViewDelegate,UIColle
         viewPhotoDetailVC.photo = photo
         self.navigationController?.pushViewController(viewPhotoDetailVC, animated: true)
     }
-
+    
 }

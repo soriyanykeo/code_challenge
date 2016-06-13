@@ -6,7 +6,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Photo Album View Controller-->
+        <!--PHOTO ALBUM-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="PhotoAlbumViewController" customModule="Photos" customModuleProvider="target" sceneMemberID="viewController">
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4g9-1y-GgN">
-                                <rect key="frame" x="20" y="64" width="560" height="536"/>
+                                <rect key="frame" x="20" y="0.0" width="560" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RVd-ev-Mxx">
                                     <size key="itemSize" width="150" height="150"/>
@@ -65,17 +65,25 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="tQ3-Fj-67d"/>
                                 </connections>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bEL-B1-aEj">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="4g9-1y-GgN" secondAttribute="trailing" id="92U-Bd-Zux"/>
-                            <constraint firstItem="4g9-1y-GgN" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="64" id="IzZ-4M-9za"/>
+                            <constraint firstItem="4g9-1y-GgN" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="IzZ-4M-9za"/>
                             <constraint firstItem="4g9-1y-GgN" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Mdn-R6-ggE"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="4g9-1y-GgN" secondAttribute="bottom" id="N43-bO-0cY"/>
+                            <constraint firstItem="bEL-B1-aEj" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="OCN-w9-dkv"/>
+                            <constraint firstItem="bEL-B1-aEj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="zvz-dB-VDn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="uTL-ak-IQv"/>
+                    <navigationItem key="navigationItem" title="PHOTO ALBUM" id="uTL-ak-IQv">
+                        <barButtonItem key="backBarButtonItem" title="back" id="QgP-MG-hd0"/>
+                    </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="bEL-B1-aEj" id="geV-sI-x23"/>
                         <outlet property="photoCollection" destination="4g9-1y-GgN" id="bIk-ek-ciy"/>
                     </connections>
                 </viewController>
@@ -83,10 +91,10 @@
             </objects>
             <point key="canvasLocation" x="1072" y="335"/>
         </scene>
-        <!--View Photo Detail View Controller-->
+        <!--viewPhotoDetail-->
         <scene sceneID="nnp-gA-ym2">
             <objects>
-                <viewController storyboardIdentifier="viewPhotoDetailVC" id="uGD-sr-F8W" customClass="ViewPhotoDetailViewController" customModule="Photos" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="viewPhotoDetailVC" id="uGD-sr-F8W" userLabel="viewPhotoDetail" customClass="ViewPhotoDetailViewController" customModule="Photos" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2cR-KU-Eaf"/>
                         <viewControllerLayoutGuide type="bottom" id="VHt-KK-wgK"/>
@@ -98,34 +106,49 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QRs-Oh-bCu">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JU5-61-Q8u">
-                                <rect key="frame" x="268" y="193" width="37" height="30"/>
-                                <state key="normal" title="SAVE"/>
-                                <connections>
-                                    <action selector="saveBttnAction:" destination="uGD-sr-F8W" eventType="touchUpInside" id="ygJ-tw-W6v"/>
-                                </connections>
-                            </button>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="downloadCircle" translatesAutoresizingMaskIntoConstraints="NO" id="hVL-pE-Knn">
+                                <rect key="frame" x="180" y="236" width="90" height="90"/>
+                            </imageView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jae-ff-cCV">
+                                <rect key="frame" x="48" y="214" width="236" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="jae-ff-cCV" firstAttribute="centerY" secondItem="hVL-pE-Knn" secondAttribute="centerY" id="4nd-x7-gnc"/>
                             <constraint firstItem="VHt-KK-wgK" firstAttribute="top" secondItem="QRs-Oh-bCu" secondAttribute="bottom" id="CBq-z1-blR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="QRs-Oh-bCu" secondAttribute="trailing" constant="-20" id="DLV-rD-ori"/>
+                            <constraint firstItem="hVL-pE-Knn" firstAttribute="centerX" secondItem="tsY-YZ-IkY" secondAttribute="centerX" id="Pxp-xs-xE7"/>
                             <constraint firstItem="QRs-Oh-bCu" firstAttribute="leading" secondItem="tsY-YZ-IkY" secondAttribute="leadingMargin" constant="-20" id="QCP-kH-r2M"/>
                             <constraint firstItem="QRs-Oh-bCu" firstAttribute="top" secondItem="tsY-YZ-IkY" secondAttribute="topMargin" id="VRT-Mx-ijy"/>
+                            <constraint firstItem="jae-ff-cCV" firstAttribute="centerX" secondItem="hVL-pE-Knn" secondAttribute="centerX" id="ZG9-Hf-erS"/>
+                            <constraint firstItem="hVL-pE-Knn" firstAttribute="bottom" secondItem="QRs-Oh-bCu" secondAttribute="bottom" constant="-100" id="zCT-vZ-oK8"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Title" id="gZo-eA-9Uv" userLabel="viewPhotoDetail">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="cvw-Gg-BHp">
+                            <connections>
+                                <action selector="saveBttnAction:" destination="uGD-sr-F8W" id="gZq-Yv-azX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="downloadCircleImage" destination="hVL-pE-Knn" id="Tha-Va-2BH"/>
                         <outlet property="imageView" destination="QRs-Oh-bCu" id="JV9-lG-gix"/>
+                        <outlet property="progressLabel" destination="jae-ff-cCV" id="b77-5W-8cz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OO2-2s-z1m" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2333" y="335"/>
         </scene>
-        <!--View Photo View Controller-->
+        <!--ViewPhotos-->
         <scene sceneID="ULE-Su-dGp">
             <objects>
-                <viewController storyboardIdentifier="viewPhotoVC" id="6MP-d7-luI" customClass="ViewPhotoViewController" customModule="Photos" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="viewPhotoVC" id="6MP-d7-luI" userLabel="ViewPhotos" customClass="ViewPhotoViewController" customModule="Photos" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aIg-Rj-gAZ"/>
                         <viewControllerLayoutGuide type="bottom" id="js6-xh-vHE"/>
@@ -165,16 +188,25 @@
                                     <outlet property="delegate" destination="6MP-d7-luI" id="Kwc-by-65z"/>
                                 </connections>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="oh3-oO-MoR">
+                                <rect key="frame" x="20" y="0.0" width="560" height="600"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="P3B-fU-VN5" firstAttribute="leading" secondItem="SHM-Xu-kxp" secondAttribute="leadingMargin" id="0IE-jC-j0f"/>
+                            <constraint firstItem="oh3-oO-MoR" firstAttribute="centerX" secondItem="SHM-Xu-kxp" secondAttribute="centerX" id="7G0-Tz-pXq"/>
+                            <constraint firstItem="oh3-oO-MoR" firstAttribute="centerY" secondItem="SHM-Xu-kxp" secondAttribute="centerY" id="9pM-mJ-cvK"/>
                             <constraint firstItem="js6-xh-vHE" firstAttribute="top" secondItem="P3B-fU-VN5" secondAttribute="bottom" id="G3j-Jq-weY"/>
                             <constraint firstItem="P3B-fU-VN5" firstAttribute="top" secondItem="SHM-Xu-kxp" secondAttribute="topMargin" id="GKi-xH-cO6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="P3B-fU-VN5" secondAttribute="trailing" id="UJw-E7-fdY"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Title" id="kXw-D0-lS7" userLabel="ViewPhotos">
+                        <barButtonItem key="backBarButtonItem" title="back" id="C3d-ez-awu"/>
+                    </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="oh3-oO-MoR" id="ekN-kP-Tm2"/>
                         <outlet property="photoCollection" destination="P3B-fU-VN5" id="sxz-cR-JS3"/>
                     </connections>
                 </viewController>
@@ -201,4 +233,7 @@
             <point key="canvasLocation" x="153" y="-357"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="downloadCircle" width="90" height="90"/>
+    </resources>
 </document>

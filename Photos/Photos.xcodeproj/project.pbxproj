@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2301EC1B1D0F34870043E06A /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2301EC191D0F34870043E06A /* Fabric.framework */; };
+		2301EC1C1D0F34870043E06A /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2301EC1A1D0F34870043E06A /* Crashlytics.framework */; };
 		23348CB51D0E04F500D48F6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23348CB41D0E04F500D48F6F /* AppDelegate.swift */; };
 		23348CB71D0E04F500D48F6F /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23348CB61D0E04F500D48F6F /* PhotoAlbumViewController.swift */; };
 		23348CBA1D0E04F500D48F6F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23348CB81D0E04F500D48F6F /* Main.storyboard */; };
@@ -33,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2301EC191D0F34870043E06A /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		2301EC1A1D0F34870043E06A /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		23348CB11D0E04F500D48F6F /* Photos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Photos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23348CB41D0E04F500D48F6F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		23348CB61D0E04F500D48F6F /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
@@ -57,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2301EC1C1D0F34870043E06A /* Crashlytics.framework in Frameworks */,
+				2301EC1B1D0F34870043E06A /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +82,8 @@
 				23348CB31D0E04F500D48F6F /* Photos */,
 				23348CC81D0E04F500D48F6F /* PhotosTests */,
 				23348CB21D0E04F500D48F6F /* Products */,
+				2301EC191D0F34870043E06A /* Fabric.framework */,
+				2301EC1A1D0F34870043E06A /* Crashlytics.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -143,6 +151,7 @@
 				23348CAD1D0E04F500D48F6F /* Sources */,
 				23348CAE1D0E04F500D48F6F /* Frameworks */,
 				23348CAF1D0E04F500D48F6F /* Resources */,
+				2301EC181D0F345D0043E06A /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -228,6 +237,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2301EC181D0F345D0043E06A /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 6c838cfcee6da2a30af31bb4001c62029714ec68 1b187f0ad607ba16c75ef1d28fcc4796ec1008c516fd7270eabbd2ad2562899a";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		23348CAD1D0E04F500D48F6F /* Sources */ = {
@@ -371,10 +397,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Photos/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.soriyany.Photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Debug;
 		};
@@ -382,10 +413,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Photos/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.soriyany.Photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};

@@ -10,10 +10,13 @@ import Foundation
 import UIKit
 
 class ViewPhotoDetailViewController: UIViewController{
-    @IBOutlet weak var imageView: UIImageView!
     var photo:Photos!
+    var photosave:PhotoDownLoaded!
+    var downloadAnimatingDL:Bool!
     
-    
+    @IBOutlet weak var downloadCircleImage: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var progressLabel: UILabel!
     lazy var downloadsSession: NSURLSession = {
         let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("bgSessionConfiguration")
         let session = NSURLSession(configuration: configuration, delegate: self, delegateQueue: nil)
@@ -22,23 +25,58 @@ class ViewPhotoDetailViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        photo.loadUrl({ (image) in
-            self.imageView.image = image
-        })
-        
+        self.title = String(self.photo.title!)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.photo.loadUrl({ (success, image) in
+                if success == true{
+                    self.imageView.image = image
+                }
+                else{
+                    let alert = UIAlertController(title: "PHOTO ALBUM", message: "There is an error of loading photo.", preferredStyle: UIAlertControllerStyle.Alert)
+                    // add an action (button)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    // show the alert
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+            })
+        }
+        self.downloadAnimatingDL = false
+    }
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.downloadsSession.finishTasksAndInvalidate();
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     @IBAction func saveBttnAction(sender: AnyObject) {
-        let photosave:PhotoDownLoaded = PhotoDownLoaded(photo: photo, downloadsSession: self.downloadsSession)
-        photosave.savePhoto({ (success) in
-            
-        })
-        
+        self.downloadAnimatingDL = true
+        self.spinDownloadDL(UIViewAnimationOptions.CurveEaseIn)
+        photosave = PhotoDownLoaded(photo: photo, downloadsSession: self.downloadsSession)
+        photosave.savePhoto()
     }
+    
+    func spinDownloadDL(options:UIViewAnimationOptions){
+        let pi:CGFloat = CGFloat(M_PI/2)
+        self.downloadCircleImage.hidden = false
+        self.progressLabel.hidden = false
+        UIView.animateWithDuration(0.2, delay: 0.0, options:[options], animations: { () -> Void in
+            self.downloadCircleImage.transform = CGAffineTransformRotate(self.downloadCircleImage.transform, pi);
+            }, completion: {
+                finished in
+                if self.downloadAnimatingDL == true{
+                    self.spinDownloadDL(UIViewAnimationOptions.CurveLinear)
+                }
+                else if(options != UIViewAnimationOptions.CurveEaseOut){
+                    self.spinDownloadDL(UIViewAnimationOptions.CurveEaseOut)
+                    self.downloadCircleImage.hidden = true
+                    self.progressLabel.hidden = true
+                    self.progressLabel.text = ""
+                }
+        })
+    }
+
 }
 extension ViewPhotoDetailViewController: NSURLSessionDelegate {
     func URLSessionDidFinishEventsForBackgroundURLSession(session: NSURLSession) {
@@ -61,43 +99,20 @@ extension ViewPhotoDetailViewController: NSURLSessionDelegate {
     }
 }
 
-// MARK: - NSURLSessionDownloadDelegate
-
+//NSURLSessionDownloadDelegate
 extension ViewPhotoDetailViewController: NSURLSessionDownloadDelegate {
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         let data = NSData(contentsOfURL: location)
         let imageToSave: UIImage = UIImage(data: data!)!
-        
-        
         UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
-        // 3
-        //        if let url = downloadTask.originalRequest?.URL?.absoluteString {
-        //            //                    activeDownloads[url] = nil
-        //            // 4
-        //            //                    if let trackIndex = trackIndexForDownloadTask(downloadTask) {
-        //            //                        dispatch_async(dispatch_get_main_queue(), {
-        //            //                            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: trackIndex, inSection: 0)], withRowAnimation: .None)
-        //            //                        })
-        //            //                    }
-        //        }
+        self.downloadAnimatingDL = false
+        self.spinDownloadDL(UIViewAnimationOptions.CurveEaseIn)
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        
-        // 1
-        //        if let downloadUrl = downloadTask.originalRequest?.URL?.absoluteString,
-        //            download = activeDownloads[downloadUrl] {
-        //            // 2
-        //            download.progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
-        //            // 3
-        //            let totalSize = NSByteCountFormatter.stringFromByteCount(totalBytesExpectedToWrite, countStyle: NSByteCountFormatterCountStyle.Binary)
-        //            // 4
-        //            if let trackIndex = trackIndexForDownloadTask(downloadTask), let trackCell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: trackIndex, inSection: 0)) as? TrackCell {
-        //                dispatch_async(dispatch_get_main_queue(), {
-        //                    trackCell.progressView.progress = download.progress
-        //                    trackCell.progressLabel.text =  String(format: "%.1f%% of %@",  download.progress * 100, totalSize)
-        //                })
-        //            }
-        //        }
+        photosave.progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.progressLabel.text = String(format: "%.0f%%",  self.photosave.progress * 100)
+        })
     }
 }

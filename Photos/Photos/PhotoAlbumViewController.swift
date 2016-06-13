@@ -9,32 +9,34 @@
 import UIKit
 
 class PhotoAlbumViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource {
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var photoCollection: UICollectionView!
     var data:NSArray = [Albums]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        activityIndicator.startAnimating()
         let photoServices:PhotoService = PhotoService(url: URLSTRING)
         photoServices.getPhotosFeed { (success, albumList) in
             if success == true{
-                //                for albumDict in albumList!{
-                //                    for photo in albumDict.photoList{
-                //                        if photo.id == 1{
-                //                            let photosave:PhotoDownLoaded = PhotoDownLoaded(photo: photo, downloadsSession: self.downloadsSession)
-                //                            photosave.savePhoto({ (success) in
-                //
-                //                            })
-                //                        }
-                //                    }
-                //                }
-                
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     self.data = albumList!
                     dispatch_async(dispatch_get_main_queue()) {
                         self.photoCollection.reloadData()
                     }
                 }
+            }
+            else{
+                let alert = UIAlertController(title: "PHOTO ALBUM", message: "There is no photo album.", preferredStyle: UIAlertControllerStyle.Alert)
+                // add an action (button)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                // show the alert
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
             }
         }
     }
@@ -56,12 +58,13 @@ class PhotoAlbumViewController: UIViewController,UICollectionViewDelegate,UIColl
             let photoArr:NSArray = album.photoList as NSArray
             if photoArr.count > 0 {
                 let photo:Photos = photoArr.firstObject as! Photos
-                photo.loadThumbnailUrl({ (image) in
-                    imageView.image = image
+                photo.loadThumbnailUrl({ (success, image) in
+                    if success == true{
+                        imageView.image = image
+                    }
                 })
             }
-            
-            
+            //View Album ID and Sum photo of album
             let albumID:String = String(album.albumID!)
             let photoCounted:String = String(album.photoList.count)
             let albumString:String = "ALBUM " + albumID + " (" +  photoCounted + ")"

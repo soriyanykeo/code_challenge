@@ -23,24 +23,32 @@ extension Photos{
         self.thumbnailUrl = photo.objectForKey("thumbnailUrl") as? String
         return self
     }
-    func loadThumbnailUrl(completionHandler: (image:UIImage)->Void){
+    func loadThumbnailUrl(completionHandler: (success:Bool,image:UIImage)->Void){
         NSURLSession.sharedSession().dataTaskWithURL( NSURL(string:self.thumbnailUrl!)!, completionHandler: {
             (data, response, error) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
+                var image:UIImage = UIImage()
                 if let data = data {
-                    let image = UIImage(data: data)
-                    completionHandler(image: image!)
+                    image = UIImage(data: data)!
+                    completionHandler(success: true,image: image)
+                }
+                else{
+                    completionHandler(success: false,image: image)
                 }
             }
         }).resume()
     }
-    func loadUrl(completionHandler: (image:UIImage)->Void){
+    func loadUrl(completionHandler: (success:Bool,image:UIImage)->Void){
         NSURLSession.sharedSession().dataTaskWithURL( NSURL(string:self.url!)!, completionHandler: {
             (data, response, error) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
+                var image:UIImage = UIImage()
                 if let data = data {
-                    let image = UIImage(data: data)
-                    completionHandler(image: image!)
+                    image = UIImage(data: data)!
+                    completionHandler(success: true,image: image)
+                }
+                else{
+                    completionHandler(success: false,image: image)
                 }
             }
         }).resume()
