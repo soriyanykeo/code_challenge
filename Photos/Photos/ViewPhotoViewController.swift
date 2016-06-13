@@ -18,7 +18,7 @@ class ViewPhotoViewController: UIViewController,UICollectionViewDelegate,UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = String(self.album.albumID!)
+        self.title = "ALBUM " + String(self.album.albumID!)
         
         if self.album.photoList.count > 0 {
             activityIndicator.startAnimating()
